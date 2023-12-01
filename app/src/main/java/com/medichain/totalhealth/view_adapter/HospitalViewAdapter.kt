@@ -25,7 +25,7 @@ class HospitalViewAdapter (val context: Context, private val hospitalArr: ArrayL
                 binding.isHighlighted = true
                 binding.canMakeCall = true
                 binding.phoneButton.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:07012341234"))
+                    val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:07086626483"))
                     context.startActivity(intent)
                 }
             } else {
