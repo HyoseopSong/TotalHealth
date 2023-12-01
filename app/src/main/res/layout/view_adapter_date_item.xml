@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <data>
+        <variable
+            name="dateNo"
+            type="String" />
+        <variable
+            name="isHoliday"
+            type="Boolean" />
+        <variable
+            name="isPast"
+            type="Boolean" />
+        <variable
+            name="isSelected"
+            type="Boolean" />
+        <variable
+            name="canReserve"
+            type="Boolean" />
+        <import type="android.view.View"/>
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <TextView
+            android:id="@+id/date_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@={dateNo, default=1}"
+            android:gravity="center"
+            android:textColor="@{isPast ? (isHoliday ? @color/past_date_red : @color/past_date_black) : (isHoliday ? @color/red : (canReserve ? @color/white : @color/black)), default=@color/black}"
+            android:background="@{canReserve ? @drawable/rounding_rectangle_pressed_blue_background : null, default=@drawable/rounding_rectangle_pressed_blue_background}"
+            android:textSize="25dp"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/red"
+            android:layout_gravity="bottom"
+            android:visibility="@{isSelected ? View.VISIBLE : View.GONE, default=gone}"
+            />
+    </FrameLayout>
+</layout>

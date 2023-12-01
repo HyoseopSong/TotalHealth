@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="activity"
+            type="com.medichain.totalhealth.ReservationListActivity" />
+    </data>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ReservationListActivity"
+        android:orientation="vertical"
+        android:background="@color/base_background_color"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exam_reservation_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="예약하기"
+            android:onClick="@{activity::onClickReserve}"
+            android:textSize="20dp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="20dp"
+            android:textStyle="bold"
+            android:background="@drawable/kakao_login"
+
+            app:layout_constraintBottom_toBottomOf="@id/login_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/login_top"
+
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

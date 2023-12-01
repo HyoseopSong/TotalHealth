@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="examName"
+            type="String" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        >
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:id="@+id/sub_exam_item"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="@={examName, default=갑상선초음파}"
+                android:textColor="@color/sub_exam_text_color"
+                android:textSize="20dp"
+                android:gravity="center_vertical"
+                />
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:text="i"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:textColor="@color/more_blue"
+                android:background="@drawable/circle_light_blue_background"
+                />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

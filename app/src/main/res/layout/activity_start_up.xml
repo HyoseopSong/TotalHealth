@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="is_splash"
+            type="Boolean" />
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="activity"
+            type="com.medichain.totalhealth.StartUpActivity" />
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_intro"
+        tools:context=".StartUpActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="토탈 헬스케어"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+
+            app:layout_constraintBottom_toBottomOf="@id/title_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/title_top"
+
+            android:visibility="@{is_splash ? View.VISIBLE : View.GONE, default=visible}"
+            />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/title_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".4"
+            />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/title_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".5"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="토탈 헬스케어"
+            android:textSize="50dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+
+            app:layout_constraintBottom_toBottomOf="@id/title_bottom_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/title_top_1"
+
+            android:visibility="@{is_splash ? View.GONE : View.VISIBLE, default=visible}"
+            />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/title_top_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".3"
+            />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/title_bottom_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".4"
+            />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/login_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".8"
+            />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/login_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".9"
+
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="간편인증 시작하기"
+            android:onClick="@{activity::onClickUserCertification}"
+            android:textSize="20dp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/black"
+            android:visibility="@{is_splash ? View.GONE : View.VISIBLE, default=visible}"
+            android:theme="@style/Button.KakaoLogin"
+            android:layout_marginHorizontal="20dp"
+            android:textStyle="bold"
+            android:background="@drawable/kakao_login"
+
+            app:layout_constraintBottom_toBottomOf="@id/login_bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/login_top"
+
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

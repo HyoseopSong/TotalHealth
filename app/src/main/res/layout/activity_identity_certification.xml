@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="userName"
+            type="String" />
+        <variable
+            name="isInputEnabled"
+            type="Boolean" />
+        <variable
+            name="isRequested"
+            type="Boolean" />
+        <variable
+            name="isDoneClicked"
+            type="Boolean" />
+        <variable
+            name="isLastAnswerReceived"
+            type="Boolean" />
+        <variable
+            name="isLoadingLayoutVisible"
+            type="Boolean" />
+        <variable
+            name="birthYear"
+            type="String" />
+        <variable
+            name="birthMonth"
+            type="String" />
+        <variable
+            name="birthDay"
+            type="String" />
+        <variable
+            name="phoneNumber"
+            type="String" />
+        <variable
+            name="error_text"
+            type="String" />
+        <variable
+            name="personal_info_text"
+            type="String" />
+        <variable
+            name="all_done_button_text"
+            type="String" />
+        <variable
+            name="certificationAdapter"
+            type="android.widget.ArrayAdapter" />
+        <variable
+            name="carrierAdapter"
+            type="android.widget.ArrayAdapter" />
+        <variable
+            name="activity"
+            type="com.medichain.totalhealth.IdentityCertificationActivity" />
+        <import type="android.view.View"/>
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".IdentityCertificationActivity"
+        >
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+                <Spinner
+                    android:id="@+id/certificationSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adapter="@{certificationAdapter}"
+                    android:spinnerMode="dropdown"
+                    />
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="이름"
+                    android:layout_marginTop="20dp"
+                    />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={userName}"
+                    android:inputType="textPersonName"
+                    android:enabled="@{isInputEnabled, default=true}"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="생년월일"
+                    android:layout_marginTop="20dp"
+                    />
+<!--                <DatePicker-->
+<!--                    android:theme="@style/MyDatePicker"-->
+<!--                    android:id="@+id/birthDatePicker"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:datePickerMode="spinner"-->
+<!--                    android:calendarViewShown="false"-->
+<!--                    />-->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    >
+                    <EditText
+                        android:layout_width="100dp"
+                        android:layout_height="match_parent"
+                        android:maxLength="4"
+                        android:text="@={birthYear}"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:enabled="@{isInputEnabled, default=true}"
+                        android:nextFocusDown="@id/birthMonthEt"
+                        />
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
+                        android:text="년"
+                        android:gravity="center"
+                        />
+                    <EditText
+                        android:id="@+id/birthMonthEt"
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:maxLength="2"
+                        android:text="@={birthMonth}"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:enabled="@{isInputEnabled, default=true}"
+                        android:nextFocusDown="@id/birthDayEt"
+                        />
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
+                        android:text="월"
+                        android:gravity="center"
+                        />
+                    <EditText
+                        android:id="@+id/birthDayEt"
+                        android:layout_width="130dp"
+                        android:layout_height="match_parent"
+                        android:maxLength="2"
+                        android:text="@={birthDay}"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:enabled="@{isInputEnabled, default=true}"
+                        />
+                    <TextView
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"
+                        android:text="일"
+                        android:gravity="center"
+                        />
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:text="******"-->
+<!--                        android:gravity="center"-->
+<!--                        />-->
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="휴대폰 번호"
+                    android:layout_marginTop="20dp"
+                    />
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:id="@+id/carrierSpinner"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:adapter="@{carrierAdapter}"
+                        android:visibility="gone"
+                        />
+
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:text="010"-->
+<!--                        android:gravity="center"-->
+<!--                        />-->
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:text="@={phoneNumber}"
+                        android:inputType="phone"
+                        android:hint="-없이 숫자만 입력하세요."
+                        android:enabled="@{isInputEnabled, default=true}"
+                        />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:orientation="vertical"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="이용약관 동의"
+                    android:layout_marginBottom="20dp"
+                    />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:text="서비스 이용약관"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="보기" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:text="개인정보 취급방침"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="보기" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    >
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:text="고유식별정보처리동의"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="보기" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="모두 동의하고 인증요청"
+                android:padding="15dp"
+                android:layout_margin="15dp"
+                android:onClick="@{activity::onClickAgree}"
+                android:enabled="@{isInputEnabled, default=true}"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{error_text, default=`에러가 발생하였습니다. 처리하세요.`}"
+                android:layout_marginHorizontal="15dp"
+                android:textColor="@color/red"
+                android:visibility="@{isRequested ? View.GONE : View.VISIBLE, default=visible}"
+                />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                >
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="인증 취소"
+                    android:padding="15dp"
+                    android:onClick="@{activity::onClickCancel}"
+                    android:visibility="@{isRequested ? View.VISIBLE : View.GONE, default=visible}"
+                    android:enabled="@{!isDoneClicked, default=true}"
+                    />
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="match_parent"
+                    />
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="인증 완료"
+                    android:padding="15dp"
+                    android:onClick="@{activity::onClickDone}"
+                    android:visibility="@{isRequested ? View.VISIBLE : View.GONE, default=visible}"
+                    android:enabled="@{!isDoneClicked, default=true}"
+                    />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="@color/see_through_black"
+            android:visibility="@{isDoneClicked ? View.VISIBLE : View.GONE, default=visible}"    >
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{personal_info_text, default=`응\n답\n을\n \n대\n기\n \n중\n입\n니\n다\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.`}"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="0dp"
+                    android:textColor="@color/white"
+                    android:textSize="30dp"
+                    />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{all_done_button_text, default=`확인`}"
+                    android:textSize="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:onClick="@{activity::onClickNext}"
+                    android:enabled="@{isLastAnswerReceived, default=true}"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </ScrollView>
+        <include
+            android:id="@+id/loading_layout"
+            layout="@layout/loading_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{isLoadingLayoutVisible ? View.VISIBLE : View.GONE, default=visible}"
+            />
+    </FrameLayout>
+</layout>

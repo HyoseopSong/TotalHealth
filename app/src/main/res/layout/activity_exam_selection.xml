@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="activity"
+            type="com.medichain.totalhealth.ExamSelectionActivity" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ExamCategoryActivity"
+        android:background="@color/base_background_color"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/exam_selection_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:text="다음"
+            android:textSize="20dp"
+            android:layout_marginBottom="30dp"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="20dp"
+            android:textStyle="bold"
+            android:background="@drawable/kakao_login"
+            android:onClick="@{activity::onClickNextButton}"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="hospital_package_name"
+            type="String" />
+        <variable
+            name="exam_type"
+            type="String" />
+        <variable
+            name="reservation_date"
+            type="String" />
+        <variable
+            name="reservation_time"
+            type="String" />
+        <variable
+            name="b_exams"
+            type="String" />
+        <variable
+            name="a_exams"
+            type="String" />
+        <variable
+            name="o_exams"
+            type="String" />
+        <variable
+            name="base_price"
+            type="String" />
+        <variable
+            name="add_price"
+            type="String" />
+        <variable
+            name="total_price"
+            type="String" />
+        <variable
+            name="buttonText"
+            type="String" />
+        <variable
+            name="is_additional_exam_exist"
+            type="Boolean" />
+        <variable
+            name="is_optional_exam_exist"
+            type="Boolean" />
+        <variable
+            name="from_reservation"
+            type="Boolean" />
+
+        <variable
+            name="activity"
+            type="com.medichain.totalhealth.ConfirmExamReservationActivity" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ConfirmExamReservationActivity"
+
+        >
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            >
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="@{hospital_package_name, default=`한국건강관리협회-경북지부-기업남성`}"
+                    android:textSize="30dp"
+                    />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/background_round_rect"
+                >
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:padding="10dp"
+                    >
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{exam_type, default=`협약검사`}"
+                            android:textSize="25dp"
+                            android:textColor="@color/blue"
+                            android:gravity="center_vertical"
+                            />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/base_exam_list"
+                            android:orientation="vertical">
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:id="@+id/tmp_layout_0"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                >
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:text="CT"
+                                    android:textSize="25dp"
+                                    android:gravity="center_vertical"
+                                    />
+
+                                <TextView
+                                    android:layout_width="40dp"
+                                    android:layout_height="match_parent"
+                                    android:text="i"
+                                    android:textStyle="bold"
+                                    android:gravity="center"
+                                    android:textSize="20dp"
+                                    android:textColor="@color/more_blue"
+                                    android:background="@drawable/circle_light_blue_background"
+                                    android:visibility="@{from_reservation ? View.VISIBLE : View.GONE, default=visible}"
+                                    />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                        <!--                    <TextView-->
+                        <!--                        android:layout_width="match_parent"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:textSize="25dp"-->
+                        <!--                        android:paddingHorizontal="10dp"-->
+                        <!--                        android:text="@{b_exams, default=`검사1\n검사2\n검사3`}"-->
+                        <!--                        />-->
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="추가검사"
+                            android:textSize="25dp"
+                            android:textColor="@color/blue"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="10dp"
+                            android:visibility="@{is_additional_exam_exist ? View.VISIBLE : View.GONE, default=visible}"
+
+                            />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/add_exam_list"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tmp_layout_1"
+                                >
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:text="MRI"
+                                    android:textSize="25dp"
+                                    android:gravity="center_vertical"
+                                    />
+                                <TextView
+                                    android:layout_width="40dp"
+                                    android:layout_height="match_parent"
+                                    android:text="i"
+                                    android:textStyle="bold"
+                                    android:gravity="center"
+                                    android:textSize="20dp"
+                                    android:textColor="@color/more_blue"
+                                    android:background="@drawable/circle_light_blue_background"
+                                    android:visibility="@{from_reservation ? View.VISIBLE : View.GONE, default=visible}"
+                                    />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="선택검사"
+                            android:textSize="25dp"
+                            android:textColor="@color/blue"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="10dp"
+                            android:visibility="@{is_optional_exam_exist ? View.VISIBLE : View.GONE, default=visible}"
+                            />
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/opt_exam_list"
+                            android:orientation="vertical">
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:id="@+id/tmp_layout_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:text="초음파"
+                                    android:textSize="25dp"
+                                    android:gravity="center_vertical"
+                                    />
+                                <TextView
+                                    android:layout_width="40dp"
+                                    android:layout_height="match_parent"
+                                    android:text="i"
+                                    android:textStyle="bold"
+                                    android:gravity="center"
+                                    android:textSize="20dp"
+                                    android:textColor="@color/more_blue"
+                                    android:background="@drawable/circle_light_blue_background"
+                                    android:visibility="@{from_reservation ? View.VISIBLE : View.GONE, default=visible}"
+                                    />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                        <!--                    <TextView-->
+                        <!--                        android:layout_width="match_parent"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:textSize="25dp"-->
+                        <!--                        android:paddingHorizontal="10dp"-->
+                        <!--                        android:text="@{t_exams, default=`검사1\n검사2\n검사3`}"-->
+                        <!--                        />-->
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="예약 날짜"
+                            android:textSize="25dp"
+                            android:textColor="@color/blue"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="20dp"
+                            />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="25dp"
+                            android:paddingHorizontal="10dp"
+                            android:text="@{reservation_date, default=`2020.10.10`}"
+                            />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="예약 시간"
+                            android:textSize="25dp"
+                            android:textColor="@color/blue"
+                            android:gravity="center_vertical"
+                            android:layout_marginTop="20dp"
+                            />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="25dp"
+                            android:paddingHorizontal="10dp"
+                            android:text="@{reservation_time, default=`19:00`}"
+                            />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="3dp"
+                            android:background="@color/light_blue"
+                            android:layout_marginVertical="10dp"
+                            />
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:textSize="25dp"
+                                android:layout_weight="1"
+                                android:paddingHorizontal="10dp"
+                                android:text="기본 금액"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="25dp"
+                                android:paddingHorizontal="10dp"
+                                android:text="@{base_price, default=`200,000`}"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="25dp"
+                                android:text="원"
+                                />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:textSize="25dp"
+                                android:layout_weight="1"
+                                android:paddingHorizontal="10dp"
+                                android:text="추가 금액"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="25dp"
+                                android:paddingHorizontal="10dp"
+                                android:text="@{add_price, default=`250,000`}"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="25dp"
+                                android:text="원"
+                                />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:textSize="25dp"
+                                android:layout_weight="1"
+                                android:paddingHorizontal="10dp"
+                                android:text="합계"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="25dp"
+                                android:paddingHorizontal="10dp"
+                                android:text="@{total_price, default=`450,000`}"
+                                />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textSize="25dp"
+                                android:text="원"
+                                />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </ScrollView>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="병원 내 사정으로 예약일이 변경될 경우 별도로 안내 드립니다."
+                android:layout_marginHorizontal="20dp"
+                />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+<!--                <android.widget.Button-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="취소"-->
+<!--                    android:padding="15dp"-->
+<!--                    android:onClick="@{activity::onClickSkip}"-->
+
+<!--                    android:background="@drawable/background_round_rect"-->
+<!--                    android:layout_marginVertical="5dp"-->
+<!--                    />-->
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@{buttonText}"
+                    android:padding="15dp"
+                    android:onClick="@{activity::onClickReserve}"
+                    />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <include
+            android:id="@+id/loading_layout"
+            layout="@layout/loading_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            />
+    </FrameLayout>
+
+</layout>

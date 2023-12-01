@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="is_title"
+            type="Boolean" />
+
+        <variable
+            name="is_spread"
+            type="Boolean" />
+        <variable
+            name="can_spread"
+            type="Boolean" />
+
+        <variable
+            name="is_optional"
+            type="Boolean" />
+        <variable
+            name="examName"
+            type="String" />
+
+        <import type="android.view.View"/>
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:visibility="@{is_title ? View.VISIBLE : View.GONE, default=gone}"
+            >
+            <TextView
+                android:id="@+id/title_text_header"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="필수"
+                android:textColor="@color/pressed_blue"
+                android:textSize="20dp"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:text="검진 항목"
+                android:textSize="20dp"
+                />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_round_rect_no_stroke"
+            android:elevation="5dp"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            android:visibility="@{is_title ? View.GONE : View.VISIBLE, default=visible}"
+            >
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="15dp"
+                android:id="@+id/main_exam_layout"
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="@={examName}"
+                    android:textColor="@color/main_exam_text_color"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:layout_marginVertical="10dp"
+                    android:visibility="@{is_optional ? View.GONE : View.VISIBLE, default=visible}"
+                    />
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:text="@={examName}"
+                    android:textColor="@color/main_exam_text_color"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:visibility="@{is_optional ? View.VISIBLE : View.GONE, default=gone}"
+                    />
+                <androidx.constraintlayout.utils.widget.ImageFilterView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:src="@{is_spread? @drawable/arrow_up : @drawable/arrow_down, default=@drawable/arrow_up}"
+                    android:visibility="@{can_spread ? View.VISIBLE : View.GONE, default=visible}"
+                    />
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="@{is_spread ? View.VISIBLE : View.GONE, default=visible}"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="15dp"
+                android:id="@+id/sub_exam_list"
+                >
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

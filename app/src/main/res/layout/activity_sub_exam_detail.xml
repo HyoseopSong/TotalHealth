@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".SubExamDetailActivity">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="20dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="내용"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="갑상선 초음파"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="관련질환"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="갑상선 결절, 갑상선 암 등"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="검진 시 유의사항"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="검진시 여러가지를 유의해야 합니다."
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            />
+
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
