@@ -61,6 +61,7 @@
             android:textSize="50dp"
             android:textColor="@color/white"
             android:textStyle="bold"
+            android:onClick="@{activity::onClickCopyFcmKey}"
 
             app:layout_constraintBottom_toBottomOf="@id/title_bottom_1"
             app:layout_constraintEnd_toEndOf="parent"

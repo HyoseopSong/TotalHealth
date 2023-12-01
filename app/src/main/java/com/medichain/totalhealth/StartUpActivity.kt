@@ -1,5 +1,7 @@
 package com.medichain.totalhealth
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -12,7 +14,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import com.medichain.totalhealth.databinding.ActivityStartUpBinding
 import kotlinx.coroutines.CoroutineScope
@@ -32,21 +33,6 @@ class StartUpActivity : AppCompatActivity() {
 
         permissionCheck()
 
-        // 현재 토큰을 가져오려면
-        // FirebaseMessaging.getInstace().getToken()을 호출한다.
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("MyTAG_FCM", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            // FCM 등록 토큰 가져오기
-            val token = task.result
-
-            val msg = "FCM Registration token: " + token;
-            Log.d("MyTAG_FCM", msg)
-            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-        })
         CoroutineScope(Dispatchers.Default).launch {
             delay(3000)
             binding.isSplash = false
@@ -59,6 +45,30 @@ class StartUpActivity : AppCompatActivity() {
 
         startActivity(mIntent)
         finish()
+    }
+    fun onClickCopyFcmKey(view: View) {
+
+        // 현재 토큰을 가져오려면
+        // FirebaseMessaging.getInstace().getToken()을 호출한다.
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("MyTAG_FCM", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // FCM 등록 토큰 가져오기
+            val token = task.result
+
+
+            val clipboard: ClipboardManager =
+                getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("label", token)
+            clipboard.setPrimaryClip(clip)
+
+            val msg = "푸시키가 클립보드에 복사되었습니다."
+//            Log.d("MyTAG_FCM", msg)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
     }
 
 
