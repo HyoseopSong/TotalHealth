@@ -51,18 +51,19 @@ class IdentityCertificationActivity : AppCompatActivity() {
         binding.isLastAnswerReceived = false
         binding.isLoadingLayoutVisible = false
 
-        binding.userName = "송효섭"
-//        binding.juminBirthPart = "851223"
-//        binding.juminSexPart = "1234567"
-        binding.phoneNumber = "01098224728"
+//        binding.userName = "송효섭"
+////        binding.juminBirthPart = "851223"
+////        binding.juminSexPart = "1234567"
+//        binding.phoneNumber = "01098224728"
+//
+////        binding.birthYear = calendar.get(Calendar.YEAR).toString()
+////        binding.birthMonth = (calendar.get(Calendar.MONTH) + 1).toString()
+////        binding.birthDay = calendar.get(Calendar.DATE).toString()
+//        binding.birthYear = "1985"
+//        binding.birthMonth = "2"
+//        binding.birthDay = "28"
+////        binding.carrierSpinner.setSelection(2)
 
-//        binding.birthYear = calendar.get(Calendar.YEAR).toString()
-//        binding.birthMonth = (calendar.get(Calendar.MONTH) + 1).toString()
-//        binding.birthDay = calendar.get(Calendar.DATE).toString()
-        binding.birthYear = "1985"
-        binding.birthMonth = "2"
-        binding.birthDay = "28"
-//        binding.carrierSpinner.setSelection(2)
         binding.personalInfoText  = ""
 
         CoroutineScope(Dispatchers.Default).launch {
@@ -155,7 +156,8 @@ class IdentityCertificationActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Default).launch {
             val resultCert = codeF.requestProduct(productUrlCert, EasyCodefServiceType.DEMO, simpleAuth)
             Log.d("MyTag CertRequest", resultCert)
-
+            delay(500)
+            requestExamList()
             val responseMap: java.util.HashMap<*, *>? = ObjectMapper().readValue(
                 resultCert,
                 HashMap::class.java
@@ -168,7 +170,6 @@ class IdentityCertificationActivity : AppCompatActivity() {
                 binding.errorText = resultMap["code"].toString() + "\n" + resultMap["message"].toString()
             }
         }
-        requestExamList()
 
     }
 
