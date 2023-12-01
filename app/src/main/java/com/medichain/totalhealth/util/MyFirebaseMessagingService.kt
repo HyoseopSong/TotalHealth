@@ -30,9 +30,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService()  {
         // 페이로드란 전송된 데이터를 의미한다.
         if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: ${remoteMessage.data}")
+//            RINGEVENT|CHANNEL:SIP/2600-BM645b8834|ISDIAL:0|RECHANNEL:SIP/INBO-BM645b8833|INEXTEN:07086626483|AGENT:2600|CALLERID:01098224728|UNIQUEID:1701468610.645190
             sendNotification(
-                remoteMessage.data["title"].toString(),
-                remoteMessage.data["body"].toString()
+                "전화 수신",
+                remoteMessage.data["CALLERID"].toString(),
             )
         } else {
             // 메시지에 알림 페이로드가 포함되어 있는지 확인한다.
@@ -85,12 +86,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService()  {
         val channelId = "fcm_default_channel"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ganada)
+            .setSmallIcon(R.drawable.app_logo)
             .setContentTitle(title)
             .setContentText(body)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
-            .setContentIntent(pendingIntent)
+//            .setContentIntent(pendingIntent)
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

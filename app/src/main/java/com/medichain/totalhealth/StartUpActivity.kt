@@ -66,7 +66,7 @@ class StartUpActivity : AppCompatActivity() {
             clipboard.setPrimaryClip(clip)
 
             val msg = "푸시키가 클립보드에 복사되었습니다."
-//            Log.d("MyTAG_FCM", msg)
+            Log.d("MyTAG_FCM", token)
             Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
         })
     }
