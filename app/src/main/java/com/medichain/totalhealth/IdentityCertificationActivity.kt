@@ -51,17 +51,17 @@ class IdentityCertificationActivity : AppCompatActivity() {
         binding.isLastAnswerReceived = false
         binding.isLoadingLayoutVisible = false
 
-//        binding.userName = "송효섭"
+//        binding.userName = "배다영"
 ////        binding.juminBirthPart = "851223"
 ////        binding.juminSexPart = "1234567"
-//        binding.phoneNumber = "01098224728"
+//        binding.phoneNumber = "01032994773"
 //
 ////        binding.birthYear = calendar.get(Calendar.YEAR).toString()
 ////        binding.birthMonth = (calendar.get(Calendar.MONTH) + 1).toString()
 ////        binding.birthDay = calendar.get(Calendar.DATE).toString()
-//        binding.birthYear = "1985"
-//        binding.birthMonth = "2"
-//        binding.birthDay = "28"
+//        binding.birthYear = "1988"
+//        binding.birthMonth = "8"
+//        binding.birthDay = "21"
 ////        binding.carrierSpinner.setSelection(2)
 
         binding.personalInfoText  = ""
@@ -189,23 +189,32 @@ class IdentityCertificationActivity : AppCompatActivity() {
             }
             delay(100)
             if (resultMap["code"] == "CF-00000") {
-                val dataMap = responseMap["data"] as LinkedHashMap<*,*>
-                binding.personalInfoText += "성명 : " + dataMap["resUserNm"] + "\n" +
-                        "생년월일 : " + dataMap["commBirthDate"] + "\n" +
-                        "검진년도 : " + dataMap["resCheckupYear"] + "\n" +
-                        "구강검진 : " + dataMap["resDentalExam"] + "\n" +
-                        "B형 간염검사 : " + dataMap["reshepatitisBTest"] + "\n" +
-                        "일반검진 : " + dataMap["resGeneralExam"] + "\n" +
-                        "확진검사 : " + dataMap["resConfirmTest"] + "\n" +
-                        "보건소 : " + dataMap["resPublicHealth"] + "\n"
-                val resCancerScreeningList = dataMap["resCancerScreeningList"] as ArrayList<*>
-                for(item in resCancerScreeningList) {
-                    val itemMap = item as LinkedHashMap<*, *>
-                    binding.personalInfoText += "\n구분 : " + itemMap["resType"] + "\n" +
-                            "암검진 : " + itemMap["resCancerScreeningList"] + "\n" +
-                            "의료비 지원 대상 : " + itemMap["resMedicalExpenses"] + "\n"
+                if(responseMap["data"] is ArrayList<*>) {
+                    val responseMapArrayList = responseMap["data"] as ArrayList<*>
+                    if(responseMapArrayList.isEmpty()) {
+                        binding.personalInfoText += "이번 년도 검진 대상이 아닙니다.\n"
+                    } else {
+                        binding.personalInfoText += "관리자에게 문의해 주세요.\n"
+                    }
+                } else {
+                    val dataMap = responseMap["data"] as LinkedHashMap<*,*>
+                    binding.personalInfoText += "성명 : " + dataMap["resUserNm"] + "\n" +
+                            "생년월일 : " + dataMap["commBirthDate"] + "\n" +
+                            "검진년도 : " + dataMap["resCheckupYear"] + "\n" +
+                            "구강검진 : " + dataMap["resDentalExam"] + "\n" +
+                            "B형 간염검사 : " + dataMap["reshepatitisBTest"] + "\n" +
+                            "일반검진 : " + dataMap["resGeneralExam"] + "\n" +
+                            "확진검사 : " + dataMap["resConfirmTest"] + "\n" +
+                            "보건소 : " + dataMap["resPublicHealth"] + "\n"
+                    val resCancerScreeningList = dataMap["resCancerScreeningList"] as ArrayList<*>
+                    for(item in resCancerScreeningList) {
+                        val itemMap = item as LinkedHashMap<*, *>
+                        binding.personalInfoText += "\n구분 : " + itemMap["resType"] + "\n" +
+                                "암검진 : " + itemMap["resCancerScreeningList"] + "\n" +
+                                "의료비 지원 대상 : " + itemMap["resMedicalExpenses"] + "\n"
+                    }
+                    binding.personalInfoText += "\n"
                 }
-                binding.personalInfoText += "\n"
             } else {
                 binding.isInputEnabled  = true
                 binding.errorText += resultMap["code"].toString() + "\n" + resultMap["message"].toString() + "\n"
