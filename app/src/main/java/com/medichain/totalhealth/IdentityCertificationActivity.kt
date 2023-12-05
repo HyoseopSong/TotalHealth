@@ -51,26 +51,29 @@ class IdentityCertificationActivity : AppCompatActivity() {
         binding.isLastAnswerReceived = false
         binding.isLoadingLayoutVisible = false
 
-//        binding.userName = "배다영"
+//        binding.userName = "송효섭"
 ////        binding.juminBirthPart = "851223"
 ////        binding.juminSexPart = "1234567"
-//        binding.phoneNumber = "01032994773"
+//        binding.phoneNumber = "01098224728"
 //
 ////        binding.birthYear = calendar.get(Calendar.YEAR).toString()
 ////        binding.birthMonth = (calendar.get(Calendar.MONTH) + 1).toString()
 ////        binding.birthDay = calendar.get(Calendar.DATE).toString()
-//        binding.birthYear = "1988"
-//        binding.birthMonth = "8"
-//        binding.birthDay = "21"
+//        binding.birthYear = "1985"
+//        binding.birthMonth = "2"
+//        binding.birthDay = "28"
 ////        binding.carrierSpinner.setSelection(2)
 
-        binding.personalInfoText  = ""
+        binding.companyInfoText1  = ""
+        binding.companyInfoText2  = ""
+        binding.healthExamInfoText  = ""
+        binding.isAgreed = true
 
         CoroutineScope(Dispatchers.Default).launch {
             globalCodeF = EasyCodef()
             val codeF = globalCodeF!!
-            codeF.setClientInfoForDemo("8086901b-bc16-485e-b5f5-4dd2c88dc400", "0c0d700d-4d0a-4446-a027-99967b04a34a");
 //          codeF.setClientInfo(EasyCodefClientInfo.CLIENT_ID, EasyCodefClientInfo.CLIENT_SECRET);
+            codeF.setClientInfoForDemo("8086901b-bc16-485e-b5f5-4dd2c88dc400", "0c0d700d-4d0a-4446-a027-99967b04a34a");
             codeF.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA34tQqkNG9gD60SmFuLuHAL9biFno82DYkWY9+H7weE1RNCFeJ1AydVqGDyxm2DOWH+90gwLyUbjMKx6LzZJgpqVgzTR5zd75F+cYhLw4lMavVKenZY1hpEGgfPSVH+Yu0BpJDDw8WCCpED+BbpVSO39D1HKc/dl8TMFQ1q8WQGJscs5S7NU7qSFVjoBOQlM6tAh0YgkI13RKomGmXtUbpbNk1unpyBJv4h4Fqm8BtBUD4bxpgv7w4SCmuG7sr4Arlm/fhL0iqnjGgMYRiDV1LOWCzMz2LPb5kCo9OMHA345AQYCyPtUbFr8SBxwHNug24Uwgk7jALvpBOLEdaE1xeQIDAQAB")
 
         }
@@ -184,21 +187,17 @@ class IdentityCertificationActivity : AppCompatActivity() {
             )
             val resultMap = responseMap?.get("result") as HashMap<*, *>
 
-            while(!binding.isLastAnswerReceived!!) {
-                delay(100)
-            }
-            delay(100)
             if (resultMap["code"] == "CF-00000") {
                 if(responseMap["data"] is ArrayList<*>) {
                     val responseMapArrayList = responseMap["data"] as ArrayList<*>
                     if(responseMapArrayList.isEmpty()) {
-                        binding.personalInfoText += "이번 년도 검진 대상이 아닙니다.\n"
+                        binding.healthExamInfoText += "이번 년도 검진 대상이 아닙니다.\n"
                     } else {
-                        binding.personalInfoText += "관리자에게 문의해 주세요.\n"
+                        binding.healthExamInfoText += "관리자에게 문의해 주세요.\n"
                     }
                 } else {
                     val dataMap = responseMap["data"] as LinkedHashMap<*,*>
-                    binding.personalInfoText += "성명 : " + dataMap["resUserNm"] + "\n" +
+                    binding.healthExamInfoText += "성명 : " + dataMap["resUserNm"] + "\n" +
                             "생년월일 : " + dataMap["commBirthDate"] + "\n" +
                             "검진년도 : " + dataMap["resCheckupYear"] + "\n" +
                             "구강검진 : " + dataMap["resDentalExam"] + "\n" +
@@ -209,11 +208,10 @@ class IdentityCertificationActivity : AppCompatActivity() {
                     val resCancerScreeningList = dataMap["resCancerScreeningList"] as ArrayList<*>
                     for(item in resCancerScreeningList) {
                         val itemMap = item as LinkedHashMap<*, *>
-                        binding.personalInfoText += "\n구분 : " + itemMap["resType"] + "\n" +
+                        binding.healthExamInfoText += "\n구분 : " + itemMap["resType"] + "\n" +
                                 "암검진 : " + itemMap["resCancerScreeningList"] + "\n" +
                                 "의료비 지원 대상 : " + itemMap["resMedicalExpenses"] + "\n"
                     }
-                    binding.personalInfoText += "\n"
                 }
             } else {
                 binding.isInputEnabled  = true
@@ -258,15 +256,16 @@ class IdentityCertificationActivity : AppCompatActivity() {
                 HashMap::class.java
             )
             val resultMap = responseMap["result"] as LinkedHashMap<*,*>
-            binding.isLastAnswerReceived = true
 
             if (resultMap["code"] == "CF-00000") {
+                binding.isLastAnswerReceived = true
                 val dataArrayList = responseMap["data"] as ArrayList<*>
                 if (dataArrayList.size > 0) {
                     val dataMap0 = dataArrayList[0] as LinkedHashMap<*, *>
 
-                    binding.personalInfoText += "자격상실일 : " + dataMap0["commEndDate"] + "\n" +
-                            "상호 : " + dataMap0["resCompanyNm"] + "\n" +
+                    binding.companyInfoText1 = "상호 : " + dataMap0["resCompanyNm"]
+                    binding.isAgreed = false
+                    binding.companyInfoText2 = "\n자격상실일 : " + dataMap0["commEndDate"] + "\n" +
                             "가입자 구분 : " + dataMap0["resJoinUserType"] + "\n" +
                             "발급일자 : " + dataMap0["resIssueDate"] + "\n" +
                             "자격취득일 : " + dataMap0["commStartDate"] + "\n" +
@@ -274,13 +273,21 @@ class IdentityCertificationActivity : AppCompatActivity() {
                             "성명 : " + dataMap0["resUserNm"] + "\n" +
                             "발급번호 : " + dataMap0["resIssueNo"] + "\n"
                 } else {
-                    binding.personalInfoText += "자격 득실 내역이 없습니다.\n"
+                    binding.companyInfoText1 = "자격 득실 내역이 없습니다.\n"
                 }
             } else {
-                binding.personalInfoText +=
-                    resultMap["code"].toString() + "\n" + resultMap["message"].toString() + "\n"
+                if (resultMap["code"] == "CF-03002") {
+                    binding.isDoneClicked = false
+                    binding.errorText = "인증이 완료되지 않았습니다."
+                } else if (resultMap["code"] == "CF-12102") {
+                    binding.companyInfoText1 = resultMap["message"].toString()
+                } else {
+                    binding.companyInfoText1 = "잠시 후 다시 시도해 주세요.\n" +
+                            resultMap["code"].toString() + "\n" +
+                            resultMap["message"].toString() + "\n" +
+                            resultMap["extraMessage"].toString()
+                }
             }
-            binding.personalInfoText += "\n"
         }
     }
 

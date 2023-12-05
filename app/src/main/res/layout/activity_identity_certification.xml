@@ -23,6 +23,9 @@
             name="isLoadingLayoutVisible"
             type="Boolean" />
         <variable
+            name="isAgreed"
+            type="Boolean" />
+        <variable
             name="birthYear"
             type="String" />
         <variable
@@ -38,7 +41,13 @@
             name="error_text"
             type="String" />
         <variable
-            name="personal_info_text"
+            name="company_info_text1"
+            type="String" />
+        <variable
+            name="company_info_text2"
+            type="String" />
+        <variable
+            name="health_exam_info_text"
             type="String" />
         <variable
             name="all_done_button_text"
@@ -315,7 +324,6 @@
                 android:text="@{error_text, default=`에러가 발생하였습니다. 처리하세요.`}"
                 android:layout_marginHorizontal="15dp"
                 android:textColor="@color/red"
-                android:visibility="@{isRequested ? View.GONE : View.VISIBLE, default=visible}"
                 />
 
             <androidx.appcompat.widget.LinearLayoutCompat
@@ -355,7 +363,7 @@
             android:layout_height="match_parent"
 
             android:background="@color/see_through_black"
-            android:visibility="@{isDoneClicked ? View.VISIBLE : View.GONE, default=visible}"    >
+            android:visibility="@{isDoneClicked ? View.VISIBLE : View.GONE, default=gone}"    >
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -369,7 +377,37 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{personal_info_text, default=`응\n답\n을\n \n대\n기\n \n중\n입\n니\n다\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.`}"
+                    android:text="@{company_info_text1, default=`응\n답\n을\n \n대\n기\n \n중\n입\n니\n다\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.`}"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="0dp"
+                    android:textColor="@color/white"
+                    android:textSize="30dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&lt; 메디체인 협약 회사 &gt;"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="0dp"
+                    android:textColor="@color/pressed_blue"
+                    android:textSize="30dp"
+                    android:visibility="@{isAgreed ? View.GONE : View.VISIBLE, default=gone}"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{company_info_text2, default=`응\n답\n을\n \n대\n기\n \n중\n입\n니\n다\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.`}"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="0dp"
+                    android:textColor="@color/white"
+                    android:textSize="30dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{health_exam_info_text, default=`응\n답\n을\n \n대\n기\n \n중\n입\n니\n다\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.`}"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp"
                     android:textColor="@color/white"
@@ -398,7 +436,7 @@
             layout="@layout/loading_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{isLoadingLayoutVisible ? View.VISIBLE : View.GONE, default=visible}"
+            android:visibility="@{isLoadingLayoutVisible ? View.VISIBLE : View.GONE, default=gone}"
             />
     </FrameLayout>
 </layout>
