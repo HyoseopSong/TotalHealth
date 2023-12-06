@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.google.android.material.datepicker.MaterialDatePicker.Builder.datePicker
 import com.medichain.totalhealth.databinding.ActivityIdentityCertificationBinding
 import io.codef.api.EasyCodef
 import io.codef.api.EasyCodefServiceType
@@ -31,7 +30,6 @@ class IdentityCertificationActivity : AppCompatActivity() {
     private var globalCodeF : EasyCodef? = null
     private var productUrlCert = "/v1/kr/public/pp/nhis-join/identify-confirmation"
     private var productUrlExam = "/v1/kr/public/pp/nhis-list/examination"
-//    private val productUrl = "/v1/kr/public/pp/nhis-list/examination"
     private val simpleAuth = HashMap<String, Any>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,10 +156,10 @@ class IdentityCertificationActivity : AppCompatActivity() {
         val codeF = globalCodeF!!
         CoroutineScope(Dispatchers.Default).launch {
             val resultCert = codeF.requestProduct(productUrlCert, EasyCodefServiceType.DEMO, simpleAuth)
-            Log.d("MyTag CertRequest", resultCert)
+//                Log.d("MyTag CertRequest", resultCert)
             delay(500)
             requestExamList()
-            val responseMap: java.util.HashMap<*, *>? = ObjectMapper().readValue(
+            val responseMap = ObjectMapper().readValue(
                 resultCert,
                 HashMap::class.java
             )
@@ -248,11 +246,11 @@ class IdentityCertificationActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Default).launch {
             binding.isDoneClicked = true
             val codeF = globalCodeF!!
-            val resultCert = codeF.requestCertification(productUrlCert, EasyCodefServiceType.DEMO, simpleAuth)
-            Log.d("MyTag SecondRequest", resultCert)
+            val resultCertification = codeF.requestCertification(productUrlCert, EasyCodefServiceType.DEMO, simpleAuth)
+            Log.d("MyTag resultCertification", resultCertification)
             binding.isLoadingLayoutVisible = false
             val responseMap: java.util.HashMap<*, *> = ObjectMapper().readValue(
-                resultCert,
+                resultCertification,
                 HashMap::class.java
             )
             val resultMap = responseMap["result"] as LinkedHashMap<*,*>
@@ -292,11 +290,7 @@ class IdentityCertificationActivity : AppCompatActivity() {
     }
 
     fun onClickNext(view: View) {
-        if(intent.getStringExtra("certiType") == "confirmation") {
-            goToNextActivity()
-        } else {
-           finish()
-        }
+        goToNextActivity()
     }
 
     private fun goToNextActivity() {
