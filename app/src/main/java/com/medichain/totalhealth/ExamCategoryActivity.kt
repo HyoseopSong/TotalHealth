@@ -1,17 +1,16 @@
 package com.medichain.totalhealth
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.medichain.totalhealth.databinding.ActivityExamCategoryBinding
 import com.medichain.totalhealth.view_adapter.ExamCategoryViewAdapter
-import com.medichain.totalhealth.view_adapter.HospitalViewAdapter
 
 class ExamCategoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityExamCategoryBinding
@@ -41,17 +40,15 @@ class ExamCategoryActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        val inflater: MenuInflater = menuInflater
-//        inflater.inflate(R.menu.exam_category, menu)
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.exam_category, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.queryExamList -> {
-                val mIntent = Intent(this, IdentityCertificationActivity::class.java)
-                mIntent.putExtra("certiType", "checkExamList")
-
+            R.id.queryDiagnosisList -> {
+                val mIntent = Intent(this, DiagnosisHistoryActivity::class.java)
                 startActivity(mIntent)
                 true
             }

@@ -38,13 +38,6 @@
         <item name="colorPrimary">@color/kakao_yellow</item>
     </style>
 
-    <style name="MyDatePicker" >
-        <!-- Text color -->
-        <item name="android:textColorPrimary">@color/red</item>
-        <!-- Divider color -->
-        <item name="colorControlNormal">@color/kakao_yellow</item>
-    </style>
-
     <style name="customTextViewFontStyle" parent="@android:style/Widget.DeviceDefault.TextView">
         <item name="android:fontFamily">@font/pretendard</item>
     </style>

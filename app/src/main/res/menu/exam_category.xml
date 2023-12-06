@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/queryExamList"
-        android:title="검진 항목 조회"
+        android:id="@+id/queryDiagnosisList"
+        android:title="내 진료 정보"
         app:showAsAction="always"
         />
 
