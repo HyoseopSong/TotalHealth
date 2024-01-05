@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/queryDiagnosisList"
-        android:title="내 진료 정보"
+        android:id="@+id/addNewCustomer"
+        android:title="등록"
         app:showAsAction="always"
         />
     <item
-        android:id="@+id/queryInsuranceList"
-        android:title="내 보험 정보"
+        android:id="@+id/refreshCustomerList"
+        android:title="새로고침"
         app:showAsAction="always"
         />
 

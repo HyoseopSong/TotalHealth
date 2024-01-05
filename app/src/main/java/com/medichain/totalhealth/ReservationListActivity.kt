@@ -34,7 +34,7 @@ class ReservationListActivity : AppCompatActivity() {
     }
 
     fun onClickReserve(view: View) {
-            val mIntent = Intent(this, HospitalSelectionActivity::class.java)
+            val mIntent = Intent(this, ExamCategoryActivity::class.java)
             startActivity(mIntent)
     }
 

@@ -52,6 +52,11 @@ class ExamCategoryActivity : AppCompatActivity() {
                 startActivity(mIntent)
                 true
             }
+            R.id.queryInsuranceList -> {
+                val mIntent = Intent(this, InsuranceStatusActivity::class.java)
+                startActivity(mIntent)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

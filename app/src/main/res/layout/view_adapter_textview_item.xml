@@ -19,38 +19,34 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:elevation="5dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:background="@{isHighlighted ? @drawable/background_round_rect_selected : @drawable/background_round_rect_no_stroke, default=@drawable/background_round_rect_no_stroke}"
         >
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <TextView
+            android:id="@+id/item_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="5dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp"
-            android:background="@{isHighlighted ? @drawable/background_round_rect_selected : @drawable/background_round_rect_no_stroke, default=@drawable/background_round_rect_no_stroke}"
-            >
-            <TextView
-                android:id="@+id/item_text_view"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="영남대학교병원"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="25dp"
-                 />
-            <androidx.constraintlayout.utils.widget.ImageFilterButton
-                android:id="@+id/phone_button"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:src="@drawable/phone"
-                android:scaleType="fitCenter"
-                android:layout_margin="5dp"
-                android:visibility="@{canMakeCall ? View.VISIBLE : View.GONE, default=visible}"
+            android:layout_weight="1"
+            android:text="영남대학교병원"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="25dp"
+             />
+        <androidx.constraintlayout.utils.widget.ImageFilterButton
+            android:id="@+id/phone_button"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:src="@drawable/phone"
+            android:scaleType="fitCenter"
+            android:layout_margin="5dp"
+            android:layout_gravity="end"
+            android:visibility="@{canMakeCall ? View.VISIBLE : View.GONE, default=visible}"
 
-                />
+            />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </FrameLayout>
 </layout>

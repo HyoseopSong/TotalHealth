@@ -15,6 +15,7 @@ import io.codef.api.EasyCodef
 import io.codef.api.EasyCodefServiceType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -23,7 +24,10 @@ class DiagnosisHistoryActivity : AppCompatActivity() {
 
     private var globalCodeF : EasyCodef? = null
     private val productUrlDiagnosis = "/v1/kr/public/hw/hira-list/my-medical-information"
+    private val productUrlMedicineHistory = "/v1/kr/public/hw/hira-list/my-medicine"
     private val simpleAuth = HashMap<String, Any>()
+    private val simpleAuth2 = HashMap<String, Any>()
+    private var resultText = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_diagnosis_history)
@@ -46,13 +50,14 @@ class DiagnosisHistoryActivity : AppCompatActivity() {
 //        binding.juminRear = "1684821"
 //        binding.phoneNumber = "01098224728"
 
-        setSearchTerm(-3)
+        setSearchTerm(-60)
 //        binding.carrierSpinner.setSelection(2)
 
         binding.dataText  = ""
         binding.basicTreatText  = ""
         binding.detailTreatText  = ""
         binding.prescribeDrugText  = ""
+        binding.pharmacyDrugText  = ""
 
         CoroutineScope(Dispatchers.Default).launch {
             globalCodeF = EasyCodef()
@@ -104,6 +109,8 @@ class DiagnosisHistoryActivity : AppCompatActivity() {
             Log.d("MyTag simpleAuth", simpleAuth.toString())
             val resultDiagnosis = codeF.requestProduct(productUrlDiagnosis, EasyCodefServiceType.DEMO, simpleAuth)
 //                Log.d("MyTag resultDiagnosis", resultDiagnosis)
+            delay(500)
+            requestMedicineHistory()
             val responseMap = ObjectMapper().readValue(
                 resultDiagnosis,
                 HashMap::class.java
@@ -117,6 +124,113 @@ class DiagnosisHistoryActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    fun requestMedicineHistory() {
+        val codeF = globalCodeF!!
+        CoroutineScope(Dispatchers.Default).launch {
+
+            simpleAuth2["organization"] = "0020"
+            simpleAuth2["loginType"] = "5"
+            simpleAuth2["identity"] = binding.juminFront + binding.juminRear
+            simpleAuth2["loginTypeLevel"] = "1"
+            simpleAuth2["phoneNo"] = binding.phoneNumber.toString()
+            simpleAuth2["userName"] = binding.userName.toString()
+//            simpleAuth2["startDate"] = binding.startYear.toString() + (binding.startMonth.toString().padStart(2, '0'))
+            simpleAuth2["telecom"] = binding.carrierSpinner.selectedItemPosition.toString()
+            simpleAuth2["id"] = simpleAuth["id"].toString()
+            simpleAuth2["detailYN"] = "0"
+            val resultMedicinHistory = codeF.requestProduct(productUrlMedicineHistory, EasyCodefServiceType.DEMO, simpleAuth2)
+            Log.d("MyTag MedicineHistoryRequest", resultMedicinHistory)
+            val responseMap: java.util.HashMap<*, *>? = ObjectMapper().readValue(
+                resultMedicinHistory,
+                HashMap::class.java
+            )
+            val resultMap = responseMap?.get("result") as HashMap<*, *>
+
+            if (resultMap["code"] == "CF-00000") {
+                if(responseMap["data"] is ArrayList<*>) {
+                    val dataMapArray = responseMap["data"] as ArrayList<*>
+                    for(dMap in dataMapArray) {
+                        val dataMap = dMap as LinkedHashMap<*, *>
+                        val resManufactureDate = dataMap["resManufactureDate"].toString()
+                        val commBrandName = dataMap["commBrandName"].toString()
+                        val resDrugList = dataMap["resDrugList"] as ArrayList<*>
+                        binding.pharmacyDrugText +=
+                            "제조사명 : " + commBrandName + "\n" +
+                            "제조일자 : " + resManufactureDate + "\n"
+
+                        for(dInfo in resDrugList) {
+                            val drugInfo = dInfo as LinkedHashMap<*, *>
+
+//                            "약품명 : " + drugInfo["resDrugName"]
+//                            "약품코드 : " + drugInfo["resDrugCode"]
+//                            "총 투약일수 : " + drugInfo["resTotalDosingdays"]
+//                            "1일 투여횟수 : " + drugInfo["resDailyDosesNumber"]
+//                            "1회 투약량 : " + drugInfo["resOneDose"]
+//                            "함량 : " + drugInfo["resContent"]
+//                            "성분명 : " + drugInfo["resIngredients"]
+//                            "호수 (매수) : " + drugInfo["resNumber"]
+//                            "처방약품효능 : " + drugInfo["resPrescribeDrugEffect"]
+
+                            binding.pharmacyDrugText +=
+                                "약품명 : " + drugInfo["resDrugName"] + "\n" +
+                                "약품코드 : " + drugInfo["resDrugCode"] + "\n" +
+                                "총 투약일수 : " + drugInfo["resTotalDosingdays"] + "\n" +
+                                "1일 투여횟수 : " + drugInfo["resDailyDosesNumber"] + "\n" +
+                                "1회 투약량 : " + drugInfo["resOneDose"] + "\n" +
+                                "함량 : " + drugInfo["resContent"] + "\n" +
+                                "성분명 : " + drugInfo["resIngredients"] + "\n" +
+                                "호수 (매수) : " + drugInfo["resNumber"] + "\n" +
+                                "처방약품효능 : " + drugInfo["resPrescribeDrugEffect"] + "\n\n"
+
+//                            binding.pharmacyDrugText +=
+//                                "약품명 : " + drugInfo["resDrugName"] + "\n" +
+//                                "약품코드 : " + drugInfo["resDrugCode"] + "\n" +
+//                                "총 투약일수 : " + drugInfo["resTotalDosingdays"] + "\n" +
+//                                "1일 투여횟수 : " + drugInfo["resDailyDosesNumber"] + "\n" +
+//                                "1회 투약량 : " + drugInfo["resOneDose"] + "\n" +
+//                                "함량 : " + drugInfo["resContent"] + "\n" +
+//                                "성분명 : " + drugInfo["resIngredients"] + "\n" +
+//                                "호수 (매수) : " + drugInfo["resNumber"] + "\n" +
+//                                "처방약품효능 : " + drugInfo["resPrescribeDrugEffect"] + "\n" +
+//                                "약품이미지 : " + drugInfo["resDrugImageLink"] + "\n" +
+//                                "제조회사 : " + drugInfo["resBrand"] + "\n"
+//                                "복약지도 : " + drugInfo["resMedicationDirection"] + "\n"
+//                                "ATC코드 : " + drugInfo["resATCCode"] + "\n"
+//                                "제형 : " + drugInfo["resFormula"] + "\n\n"
+                        }
+                    }
+
+//                    val responseMapArrayList = responseMap["data"] as ArrayList<*>
+//                    if(responseMapArrayList.isEmpty()) {
+//                        binding.pharmacyDrugText += "이번 년도 검진 대상이 아닙니다.\n"
+//                    } else {
+//                        binding.pharmacyDrugText += "관리자에게 문의해 주세요.\n"
+//                    }
+                } else {
+//                    val dataMap = responseMap["data"] as LinkedHashMap<*,*>
+//                    binding.pharmacyDrugText += "성명 : " + dataMap["resUserNm"] + "\n" +
+//                            "생년월일 : " + dataMap["commBirthDate"] + "\n" +
+//                            "검진년도 : " + dataMap["resCheckupYear"] + "\n" +
+//                            "구강검진 : " + dataMap["resDentalExam"] + "\n" +
+//                            "B형 간염검사 : " + dataMap["reshepatitisBTest"] + "\n" +
+//                            "일반검진 : " + dataMap["resGeneralExam"] + "\n" +
+//                            "확진검사 : " + dataMap["resConfirmTest"] + "\n" +
+//                            "보건소 : " + dataMap["resPublicHealth"] + "\n"
+//                    val resCancerScreeningList = dataMap["resCancerScreeningList"] as ArrayList<*>
+//                    for(item in resCancerScreeningList) {
+//                        val itemMap = item as LinkedHashMap<*, *>
+//                        binding.pharmacyDrugText += "\n구분 : " + itemMap["resType"] + "\n" +
+//                                "암검진 : " + itemMap["resCancerScreeningList"] + "\n" +
+//                                "의료비 지원 대상 : " + itemMap["resMedicalExpenses"] + "\n"
+//                    }
+                }
+            } else {
+                binding.isInputEnabled  = true
+                binding.errorText += resultMap["code"].toString() + "\n" + resultMap["message"].toString() + "\n"
+            }
+        }
     }
 
     fun prepareCertification(dataMap : HashMap<*, *>) {
@@ -151,6 +265,7 @@ class DiagnosisHistoryActivity : AppCompatActivity() {
         binding.endMonth = (tmpCalendar.get(Calendar.MONTH) + 1).toString()
         binding.endDate = tmpCalendar.get(Calendar.DATE).toString()
         tmpCalendar.add(Calendar.MONTH, month)
+        tmpCalendar.add(Calendar.DATE, 1)
         binding.startYear = tmpCalendar.get(Calendar.YEAR).toString()
         binding.startMonth = (tmpCalendar.get(Calendar.MONTH) + 1).toString()
         binding.startDate = tmpCalendar.get(Calendar.DATE).toString()
@@ -182,30 +297,65 @@ class DiagnosisHistoryActivity : AppCompatActivity() {
             if (resultMap["code"] == "CF-00000") {
                 binding.isLastAnswerReceived = true
                 val dataMap = responseMap["data"] as LinkedHashMap<*,*>
-                val resBasicTreatList = dataMap["resBasicTreatList"] as ArrayList<*>
-                val resDetailTreatList = dataMap["resDetailTreatList"] as ArrayList<*>
-                val resPrescribeDrugList = dataMap["resPrescribeDrugList"] as ArrayList<*>
 
                 binding.dataText = "성명 : " + dataMap["commName"] + "\n" +
                         "조회시작일 : " + dataMap["commStartDate"] + "\n" +
-                        "조회종료일 : " + dataMap["commEndDate"] + "\n"
+                        "조회종료일 : " + dataMap["commEndDate"] + "\n" +
+                        "회사명 : " + getSharedPreferences(packageName, MODE_PRIVATE).getString("회사명", "메디체인") + "\n" +
+                        "키 : " + getSharedPreferences(packageName, MODE_PRIVATE).getString("키", "메디체인") + "\n" +
+                        "몸무게 : " + getSharedPreferences(packageName, MODE_PRIVATE).getString("몸무게", "메디체인") + "\n" +
+                        "BMI : " + getSharedPreferences(packageName, MODE_PRIVATE).getString("BMI", "메디체인") + "\n"
 
+                val resBasicTreatList = dataMap["resBasicTreatList"] as ArrayList<*>
                 for(item in resBasicTreatList) {
                     val itemMap = item as LinkedHashMap<*, *>
-                    binding.basicTreatText += "진료시작일 : " + itemMap["resTreatStartDate"] + "\n" +
-                            "병/의원&약국 : " + itemMap["resHospitalName"] + "\n" +
-                            "진단과 : " + itemMap["resDepartment"] + "\n" +
-                            "타입 : " + itemMap["resTreatType"] + "\n" +
-                            "주상병코드 : " + itemMap["resDiseaseCode"] + "\n" +
-                            "주상병명 : " + itemMap["resDiseaseName"] + "\n" +
-                            "내원일수 : " + itemMap["resVisitDays"] + "\n" +
-                            "총 진료비 : " + itemMap["resTotalAmount"] + "\n" +
-                            "혜택받은 금액 : " + itemMap["resPublicCharge"] + "\n" +
-                            "내가 낸 의료비 : " + itemMap["resDeductibleAmt"] + "\n" +
-                            "병원코드 : " + itemMap["resHospitalCode"] + "\n\n"
+                    if(itemMap["resDepartment"].toString() == "일반의") {
+                        continue
+                    }
+//                    "진료시작일 : " + itemMap["resTreatStartDate"]
+//                    "병/의원&약국 : " + itemMap["resHospitalName"]
+//                    "진단과 : " + itemMap["resDepartment"]
+//                    "타입 : " + itemMap["resTreatType"]
+//                    "주상병코드 : " + itemMap["resDiseaseCode"]
+//                    "주상병명 : " + itemMap["resDiseaseName"]
+//                    "내원일수 : " + itemMap["resVisitDays"]
+
+                    binding.basicTreatText +=
+                        "진료시작일 : " + itemMap["resTreatStartDate"] + "\n" +
+                        "병/의원&약국 : " + itemMap["resHospitalName"] + "\n" +
+                        "진단과 : " + itemMap["resDepartment"] + "\n" +
+                        "타입 : " + itemMap["resTreatType"] + "\n" +
+                        "주상병코드 : " + itemMap["resDiseaseCode"] + "\n" +
+                        "주상병명 : " + itemMap["resDiseaseName"] + "\n" +
+                        "내원일수 : " + itemMap["resVisitDays"] + "\n\n"
+
+//                    binding.basicTreatText += "진료시작일 : " + itemMap["resTreatStartDate"] + "\n" +
+//                            "병/의원&약국 : " + itemMap["resHospitalName"] + "\n" +
+//                            "진단과 : " + itemMap["resDepartment"] + "\n" +
+//                            "타입 : " + itemMap["resTreatType"] + "\n" +
+//                            "주상병코드 : " + itemMap["resDiseaseCode"] + "\n" +
+//                            "주상병명 : " + itemMap["resDiseaseName"] + "\n" +
+//                            "내원일수 : " + itemMap["resVisitDays"] + "\n" +
+//                            "총 진료비 : " + itemMap["resTotalAmount"] + "\n" +
+//                            "혜택받은 금액 : " + itemMap["resPublicCharge"] + "\n" +
+//                            "내가 낸 의료비 : " + itemMap["resDeductibleAmt"] + "\n" +
+//                            "병원코드 : " + itemMap["resHospitalCode"] + "\n\n"
                 }
+
+                val resDetailTreatList = dataMap["resDetailTreatList"] as ArrayList<*>
                 for(item in resDetailTreatList) {
                     val itemMap = item as LinkedHashMap<*, *>
+                    if(itemMap["resTreatType"] == "조제료등") {
+                        continue
+                    }
+//                    "진료시작일 : " + itemMap["resTreatStartDate"]
+//                    "병/의원&약국 : " + itemMap["resHospitalName"]
+//                    "진료형태 : " + itemMap["resTreatType"]
+//                    "코드명 : " + itemMap["resCodeName"]
+//                    "1회 투약량 : " + itemMap["resOneDose"]
+//                    "1회 투여횟수 : " + itemMap["resDailyDosesNumber"]
+//                    "총 투약일수 : " + itemMap["resTotalDosingdays"]
+
                     binding.detailTreatText += "진료시작일 : " + itemMap["resTreatStartDate"] + "\n" +
                             "병/의원&약국 : " + itemMap["resHospitalName"] + "\n" +
                             "진료형태 : " + itemMap["resTreatType"] + "\n" +
@@ -214,17 +364,19 @@ class DiagnosisHistoryActivity : AppCompatActivity() {
                             "1회 투여횟수 : " + itemMap["resDailyDosesNumber"] + "\n" +
                             "총 투약일수 : " + itemMap["resTotalDosingdays"] + "\n\n"
                 }
-                for(item in resPrescribeDrugList) {
-                    val itemMap = item as LinkedHashMap<*, *>
-                    binding.prescribeDrugText += "진료시작일 : " + itemMap["resTreatStartDate"] + "\n" +
-                            "병/의원&약국 : " + itemMap["resHospitalName"] + "\n" +
-                            "진료형태 : " + itemMap["resTreatType"] + "\n" +
-                            "약품명 : " + itemMap["resDrugName"] + "\n" +
-                            "성분명 : " + itemMap["resIngredients"] + "\n" +
-                            "1회 투약량 : " + itemMap["resOneDose"] + "\n" +
-                            "1회 투여횟수 : " + itemMap["resDailyDosesNumber"] + "\n" +
-                            "총 투약일수 : " + itemMap["resTotalDosingdays"] + "\n\n"
-                }
+
+//                val resPrescribeDrugList = dataMap["resPrescribeDrugList"] as ArrayList<*>
+//                for(item in resPrescribeDrugList) {
+//                    val itemMap = item as LinkedHashMap<*, *>
+//                    binding.prescribeDrugText += "진료시작일 : " + itemMap["resTreatStartDate"] + "\n" +
+//                            "병/의원&약국 : " + itemMap["resHospitalName"] + "\n" +
+//                            "진료형태 : " + itemMap["resTreatType"] + "\n" +
+//                            "약품명 : " + itemMap["resDrugName"] + "\n" +
+//                            "성분명 : " + itemMap["resIngredients"] + "\n" +
+//                            "1회 투약량 : " + itemMap["resOneDose"] + "\n" +
+//                            "1회 투여횟수 : " + itemMap["resDailyDosesNumber"] + "\n" +
+//                            "총 투약일수 : " + itemMap["resTotalDosingdays"] + "\n\n"
+//                }
 
             } else {
                 if (resultMap["code"] == "CF-03002") {
@@ -243,6 +395,18 @@ class DiagnosisHistoryActivity : AppCompatActivity() {
     }
 
     fun onClickNext(view: View) {
+        resultText = binding.basicTreatText.toString() + "\n\n\n" +
+                binding.detailTreatText.toString() + "\n\n\n" +
+                binding.pharmacyDrugText.toString()
+
+        val clipboard: ClipboardManager =
+            getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("label", resultText)
+        clipboard.setPrimaryClip(clip)
+
+
+
+
         finish()
     }
 

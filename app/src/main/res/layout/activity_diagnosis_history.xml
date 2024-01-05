@@ -48,6 +48,9 @@
             name="prescribeDrugText"
             type="String" />
         <variable
+            name="pharmacyDrugText"
+            type="String" />
+        <variable
             name="all_done_button_text"
             type="String" />
         <variable
@@ -197,41 +200,41 @@
                     android:layout_marginTop="20dp"
                     />
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="3개월"
-                        android:onClick="@{activity::onClickSearchTerm3}"
+<!--                <androidx.appcompat.widget.LinearLayoutCompat-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    >-->
+<!--                    <Button-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="3개월"-->
+<!--                        android:onClick="@{activity::onClickSearchTerm3}"-->
 
-                        />
-                    <View
-                        android:layout_width="10dp"
-                        android:layout_height="match_parent"
-                        />
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="6개월"
-                        android:onClick="@{activity::onClickSearchTerm6}"
-                        />
-                    <View
-                        android:layout_width="10dp"
-                        android:layout_height="match_parent"
-                        />
-                    <Button
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="12개월"
-                        android:onClick="@{activity::onClickSearchTerm12}"
-                        />
-                </androidx.appcompat.widget.LinearLayoutCompat>
+<!--                        />-->
+<!--                    <View-->
+<!--                        android:layout_width="10dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        />-->
+<!--                    <Button-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="6개월"-->
+<!--                        android:onClick="@{activity::onClickSearchTerm6}"-->
+<!--                        />-->
+<!--                    <View-->
+<!--                        android:layout_width="10dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        />-->
+<!--                    <Button-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="12개월"-->
+<!--                        android:onClick="@{activity::onClickSearchTerm12}"-->
+<!--                        />-->
+<!--                </androidx.appcompat.widget.LinearLayoutCompat>-->
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -542,10 +545,30 @@
                     android:textColor="@color/white"
                     android:textSize="30dp"
                     />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="처방조제정보 List"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_marginStart="0dp"-->
+<!--                    android:textColor="@color/pressed_blue"-->
+<!--                    android:textSize="30dp"-->
+
+<!--                    />-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@{prescribeDrugText, default=`응\n답\n을\n \n대\n기\n \n중\n입\n니\n다\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.`}"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginStart="0dp"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="30dp"-->
+<!--                    />-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="처방조제정보 List"
+                    android:text="약국 조제정보 List"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:layout_marginStart="0dp"
@@ -556,7 +579,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{prescribeDrugText, default=`응\n답\n을\n \n대\n기\n \n중\n입\n니\n다\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.`}"
+                    android:text="@{pharmacyDrugText, default=`응\n답\n을\n \n대\n기\n \n중\n입\n니\n다\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n.`}"
                     android:layout_gravity="center"
                     android:layout_marginStart="0dp"
                     android:textColor="@color/white"

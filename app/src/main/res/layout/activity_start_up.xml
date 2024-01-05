@@ -8,6 +8,12 @@
         <variable
             name="is_splash"
             type="Boolean" />
+        <variable
+            name="LoginID"
+            type="String" />
+        <variable
+            name="LoginPW"
+            type="String" />
 
         <import type="android.view.View"/>
 
@@ -88,6 +94,27 @@
             />
 
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/h60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".6"
+            />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/v30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".3"
+            />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/h70"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".7"
+            />
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/login_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -103,11 +130,70 @@
 
             />
 
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="ID"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/h70"
+            app:layout_constraintEnd_toEndOf="@id/v30"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/h60"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/login_top"
+            app:layout_constraintEnd_toEndOf="@id/v30"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/h70"
+            android:gravity="center"
+            />
+
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="20dp"
+            android:textStyle="bold"
+            android:text="@={LoginID}"
+            android:inputType="text"
+
+            app:layout_constraintBottom_toBottomOf="@id/h70"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/v30"
+            app:layout_constraintTop_toTopOf="@id/h60"
+
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="20dp"
+            android:textStyle="bold"
+            android:text="@={LoginPW}"
+
+            app:layout_constraintBottom_toBottomOf="@id/login_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/v30"
+            app:layout_constraintTop_toTopOf="@id/h70"
+            android:inputType="textPassword"
+            />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="간편인증 시작하기"
-            android:onClick="@{activity::onClickUserCertification}"
+            android:text="로그인"
+            android:onClick="@{activity::onClickLogIn}"
             android:textSize="20dp"
             android:paddingVertical="10dp"
             android:textColor="@color/black"

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".CustomerInfoActivity"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/tab_layout"
+            >
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/home_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="보험내역" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/user_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="검진자격" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/setting_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="검진결과" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

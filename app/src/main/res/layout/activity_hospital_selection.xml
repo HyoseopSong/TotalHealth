@@ -79,6 +79,8 @@
             android:layout_marginBottom="17.5dp"
             app:fabSize="mini"
             app:srcCompat="@drawable/location"
+            android:backgroundTint="@color/more_blue"
+            app:tint="@null"
             />
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_search"
@@ -88,7 +90,9 @@
             android:layout_marginEnd="20.5dp"
             android:layout_marginBottom="17.5dp"
             app:fabSize="mini"
-            app:srcCompat="@drawable/search" />
+            app:srcCompat="@drawable/search"
+            android:backgroundTint="@color/more_blue"
+            app:tint="@null" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_hangul"
@@ -99,6 +103,8 @@
             android:layout_marginBottom="17.5dp"
             app:fabSize="mini"
             app:srcCompat="@drawable/ganada"
+            android:backgroundTint="@color/more_blue"
+            app:tint="@null"
             />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -110,6 +116,8 @@
             android:layout_marginBottom="13dp"
             app:srcCompat="@drawable/more_vertical"
             android:contentDescription="TODO"
+            android:backgroundTint="@color/more_blue"
+            app:tint="@null"
 
             />
     </FrameLayout>
