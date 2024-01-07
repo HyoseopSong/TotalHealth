@@ -40,7 +40,6 @@ public class ServerAPI {
                             context
                         )
                     )
-                    .addInterceptor(CustomInterceptor(context, ""))
                     .build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
