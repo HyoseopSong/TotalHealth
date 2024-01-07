@@ -23,14 +23,20 @@
             name="isLoadingLayoutVisible"
             type="Boolean" />
         <variable
-            name="queryCompany"
-            type="Boolean" />
-        <variable
             name="queryExamSubject"
             type="Boolean" />
         <variable
             name="queryCheckUpResult"
             type="Boolean" />
+        <variable
+            name="queryCompanyStatus"
+            type="String" />
+        <variable
+            name="queryExamSubjectStatus"
+            type="String" />
+        <variable
+            name="queryCheckUpResultStatus"
+            type="String" />
         <variable
             name="birthYear"
             type="String" />
@@ -320,29 +326,72 @@
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
                 >
-                <CheckBox
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="직장정보"
-                    android:checked="true"
-                    android:enabled="false"
-                    />
-                <CheckBox
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@={queryCompanyStatus}"
+                        android:gravity="right|center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/blue"
+                        />
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="직장정보"
+                        android:checked="true"
+                        android:enabled="false"
+                        />
+
+                </FrameLayout>
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="검진대상"
-                    android:checked="@={queryExamSubject}"
-                    />
-                <CheckBox
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@={queryExamSubjectStatus}"
+                        android:gravity="right|center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/blue"
+                        />
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="검진대상"
+                        android:checked="@={queryExamSubject}"
+                        />
+
+                </FrameLayout>
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="검진결과"
-                    android:checked="@={queryCheckUpResult}"
-                    />
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@={queryCheckUpResultStatus}"
+                        android:gravity="right|center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/blue"
+                        />
+                    <CheckBox
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="검진결과"
+                        android:checked="@={queryCheckUpResult}"
+                        />
+
+                </FrameLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
             <Button
                 android:layout_width="match_parent"
@@ -399,7 +448,7 @@
             android:layout_height="match_parent"
 
             android:background="@color/see_through_black"
-            android:visibility="@{isDoneClicked ? View.VISIBLE : View.GONE, default=visible}"    >
+            android:visibility="@{isDoneClicked ? View.VISIBLE : View.GONE, default=gone}"    >
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

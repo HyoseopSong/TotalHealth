@@ -32,7 +32,6 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Field
 import java.util.Calendar
 
 
@@ -42,13 +41,12 @@ class IdentityCertificationActivity : AppCompatActivity() {
 
     private var resultText = ""
     private var globalCodeF : EasyCodef? = null
-    private var productUrlCert = "/v1/kr/public/pp/nhis-join/identify-confirmation"
 //    private var productUrlCert = "/v1/kr/public/pp/nhis-member/identify-confirmation"
+    private var productUrlCert = "/v1/kr/public/pp/nhis-join/identify-confirmation"
     private var productUrlExam = "/v1/kr/public/pp/nhis-list/examination"
     private var productUrlCheckUpResult = "/v1/kr/public/pp/nhis-health-checkup/result"
     private val simpleAuth = HashMap<String, Any>()
-    private var resultCount = 0
-    private lateinit var customer : Customer
+    private var customer = Customer("", "", "", "")
     private lateinit var loginID : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,10 +170,12 @@ class IdentityCertificationActivity : AppCompatActivity() {
 //            }
 //        }
 
-        calendar.set(binding.birthYear!!.toInt(), binding.birthMonth!!.toInt(), binding.birthDay!!.toInt())
-        customer = Customer(binding.userName.toString(),
-            calendar.get(Calendar.YEAR).toString() + (calendar.get(Calendar.MONTH).toString().padStart(2, '0')) + calendar.get(Calendar.DATE).toString().padStart(2, '0'),
-            binding.phoneNumber.toString(), loginID)
+        setCustomer()
+
+        binding.queryCompanyStatus = ""
+        binding.queryExamSubjectStatus = ""
+        binding.queryCheckUpResultStatus = ""
+
         binding.isInputEnabled  = false
         simpleAuth["organization"] = "0002"
         simpleAuth["loginType"] = "5"
@@ -191,8 +191,7 @@ class IdentityCertificationActivity : AppCompatActivity() {
 
         val codeF = globalCodeF!!
         CoroutineScope(Dispatchers.Default).launch {
-            resultCount++
-            binding.errorText = resultCount.toString()
+            binding.queryCompanyStatus = "..."
             val resultCert = codeF.requestProduct(productUrlCert, EasyCodefServiceType.DEMO, simpleAuth)
             Log.d("MyTag resultCert", resultCert)
 
@@ -202,6 +201,7 @@ class IdentityCertificationActivity : AppCompatActivity() {
             )
             val resultMap = responseMap?.get("result") as HashMap<*, *>
             if(resultMap["code"].toString() == "CF-03002") {
+                binding.queryCompanyStatus = "O"
                 ServerAPI().getAPI(this@IdentityCertificationActivity).create(APIInterface::class.java)
                     .CreateCustomer(customer.name, customer.birth, customer.phone, loginID)
                     .enqueue(object :
@@ -210,23 +210,28 @@ class IdentityCertificationActivity : AppCompatActivity() {
                             call: Call<ResponseBody>,
                             response: Response<ResponseBody>
                         ) {
-                            val responseBody = response.body()!!.string()
-                            if(responseBody != "T") {
-                                Toast.makeText(this@IdentityCertificationActivity, "고객 등록을 못 했습니다.", Toast.LENGTH_SHORT).show()
+                            if(response.code() == 200) {
+                                val responseBody = response.body()!!.string()
+                                if(responseBody != "T") {
+                                    Toast.makeText(this@IdentityCertificationActivity, "고객 등록을 못 했습니다.", Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+
+                                Toast.makeText(this@IdentityCertificationActivity, response.message(), Toast.LENGTH_SHORT).show()
+
                             }
                         }
 
                         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                            codefPostProcess()
+                            binding.errorText = call.toString()
 //                    Toast.makeText(this@IdentityCertificationActivity, "서버에 연결할 수 없습니다.", Toast.LENGTH_LONG).show()
 //                    binding.loadingLayout.root.visibility = View.GONE
                         }
                     })
                 prepareCertification(responseMap["data"] as HashMap<*, *>)
             } else {
+                binding.queryCompanyStatus = "X"
                 binding.isInputEnabled  = true
-                binding.errorText = resultMap["code"].toString() + "\n" + resultMap["message"].toString()
-                resultCount--
             }
         }
         if(binding.queryExamSubject == true) {
@@ -237,13 +242,19 @@ class IdentityCertificationActivity : AppCompatActivity() {
         }
     }
 
+    fun setCustomer() {
+        calendar.set(binding.birthYear!!.toInt(), binding.birthMonth!!.toInt(), binding.birthDay!!.toInt())
+        customer = Customer(binding.userName.toString(),
+            calendar.get(Calendar.YEAR).toString() + (calendar.get(Calendar.MONTH).toString().padStart(2, '0')) + calendar.get(Calendar.DATE).toString().padStart(2, '0'),
+            binding.phoneNumber.toString(), loginID)
+    }
+
     fun requestExamList() {
         val codeF = globalCodeF!!
         CoroutineScope(Dispatchers.Default).launch {
             delay(750)
+            binding.queryExamSubjectStatus = "O"
             binding.healthExamInfoText = "검진대상 응답 대기 중"
-            resultCount++
-            binding.errorText = resultCount.toString()
             val resultExam = codeF.requestProduct(productUrlExam, EasyCodefServiceType.DEMO, simpleAuth)
             Log.d("MyTag ExamListRequest", resultExam)
             val responseMap: java.util.HashMap<*, *>? = ObjectMapper().readValue(
@@ -256,11 +267,10 @@ class IdentityCertificationActivity : AppCompatActivity() {
                 if(responseMap["data"] is ArrayList<*>) {
                     val responseMapArrayList = responseMap["data"] as ArrayList<*>
                     if(responseMapArrayList.isEmpty()) {
-                        binding.healthExamInfoText += "이번 년도 검진 대상이 아닙니다.\n"
+                        binding.healthExamInfoText = "이번 년도 검진 대상이 아닙니다.\n"
                     } else {
-                        binding.healthExamInfoText += "관리자에게 문의해 주세요.\n"
+                        binding.healthExamInfoText = "관리자에게 문의해 주세요.\n"
                     }
-                    codefPostProcess()
                 } else {
                     val dataMap = responseMap["data"] as LinkedHashMap<*,*>
                     binding.healthExamInfoText = "검진대상 완료"
@@ -312,20 +322,19 @@ class IdentityCertificationActivity : AppCompatActivity() {
                                     Toast.makeText(this@IdentityCertificationActivity, "검사 대상 정보 저장을 못 했습니다.", Toast.LENGTH_SHORT).show()
 
                                 }
-                                codefPostProcess()
                             }
 
                             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                                binding.errorText = call.toString()
+
 //                    Toast.makeText(this@IdentityCertificationActivity, "서버에 연결할 수 없습니다.", Toast.LENGTH_LONG).show()
 //                    binding.loadingLayout.root.visibility = View.GONE
-                                codefPostProcess()
                             }
                         })
                 }
             } else {
-                binding.checkupResultInfoText = "검진대상 : " + resultMap["message"]
-
-                codefPostProcess()
+                binding.queryExamSubjectStatus = "X"
+                binding.isInputEnabled  = true
             }
         }
     }
@@ -334,17 +343,14 @@ class IdentityCertificationActivity : AppCompatActivity() {
         val codeF = globalCodeF!!
         CoroutineScope(Dispatchers.Default).launch {
             delay(1000)
-            resultCount++
-            binding.errorText = resultCount.toString()
+            binding.queryCheckUpResultStatus = "O"
             binding.checkupResultInfoText = "검진결과 응답 대기 중"
             val checkUpResultResponse = codeF.requestProduct(productUrlCheckUpResult, EasyCodefServiceType.DEMO, simpleAuth)
 
-
-            val clipboard: ClipboardManager =
-                getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("label", checkUpResultResponse)
-            clipboard.setPrimaryClip(clip)
-
+//            val clipboard: ClipboardManager =
+//                getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+//            val clip = ClipData.newPlainText("label", checkUpResultResponse)
+//            clipboard.setPrimaryClip(clip)
 
             Log.d("MyTag checkUpResultResponse", checkUpResultResponse)
             val responseMap: java.util.HashMap<*, *>? = ObjectMapper().readValue(
@@ -372,10 +378,8 @@ class IdentityCertificationActivity : AppCompatActivity() {
                     processPreviewList(resPreviewList)
                 }
             } else {
-//                binding.queryCheckUpResult = false
-
-                binding.checkupResultInfoText = "검진결과 : " + resultMap["message"]
-                codefPostProcess()
+                binding.queryCheckUpResultStatus = "X"
+                binding.isInputEnabled  = true
             }
         }
     }
@@ -389,9 +393,6 @@ class IdentityCertificationActivity : AppCompatActivity() {
             }
         }
 
-//                            binding.checkupResultInfoText += "BMI : " + recentPreviewResult["resBMI"] + "\n" +
-//                                "몸무게 : " + recentPreviewResult["resWeight"] + "\n" +
-//                                "키 : " + recentPreviewResult["resHeight"]
         binding.checkupResultInfoText = "검진결과 완료"
         getSharedPreferences(packageName, MODE_PRIVATE).edit()
             .putString("BMI", recentPreviewResult["resBMI"].toString())
@@ -438,13 +439,13 @@ class IdentityCertificationActivity : AppCompatActivity() {
                     if(responseBody != "T") {
                         Toast.makeText(this@IdentityCertificationActivity, "검사 대상 정보 저장을 못 했습니다.", Toast.LENGTH_SHORT).show()
                     }
-                    codefPostProcess()
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    binding.errorText = call.toString()
+
 //                    Toast.makeText(this@IdentityCertificationActivity, "서버에 연결할 수 없습니다.", Toast.LENGTH_LONG).show()
 //                    binding.loadingLayout.root.visibility = View.GONE
-                    codefPostProcess()
                 }
             })
     }
@@ -462,16 +463,42 @@ class IdentityCertificationActivity : AppCompatActivity() {
     }
 
     fun onClickDone(view: View) {
-        certificationDone(true)
+        certificationDone()
     }
 
     fun onClickCancel(view: View) {
-        certificationDone(false)
+        simpleAuth["simpleAuth"] = "0"
         // {"result":{"code":"CF-12102","extraMessage":"","message":"추가 인증 진행이 취소되었습니다.","transactionId":"6566790428e6482d2c4d7f61"},"data":{}}
+        binding.isLoadingLayoutVisible = true
+        CoroutineScope(Dispatchers.Default).launch {
+            binding.errorText = "간편인증 요청 취소 중"
+            val codeF = globalCodeF!!
+            val resultCertificationCancel = codeF.requestCertification(productUrlCert, EasyCodefServiceType.DEMO, simpleAuth)
+            Log.d("MyTag resultCertificationCancel", resultCertificationCancel)
+            binding.isLoadingLayoutVisible = false
+            val responseMap: java.util.HashMap<*, *> = ObjectMapper().readValue(
+                resultCertificationCancel,
+                HashMap::class.java
+            )
+            val resultMap = responseMap["result"] as LinkedHashMap<*,*>
+
+            if (resultMap["code"] == "CF-12102") {
+                binding.isRequested = false
+                binding.isDoneClicked = false
+                binding.isInputEnabled = true
+                binding.errorText = "간편인증 요청 취소 완료"
+
+            } else {
+                binding.errorText = "잠시 후 다시 시도해 주세요.\n" +
+                        resultMap["code"].toString() + "\n" +
+                        resultMap["message"].toString() + "\n" +
+                        resultMap["extraMessage"].toString()
+            }
+        }
     }
 
-    private fun certificationDone(isDone : Boolean) {
-        simpleAuth["simpleAuth"] = if(isDone) "1" else "0"
+    private fun certificationDone() {
+        simpleAuth["simpleAuth"] = "1"
 
         binding.isLoadingLayoutVisible = true
         CoroutineScope(Dispatchers.Default).launch {
@@ -532,59 +559,45 @@ class IdentityCertificationActivity : AppCompatActivity() {
                                 if(responseBody != "T") {
                                     Toast.makeText(this@IdentityCertificationActivity, "검사 대상 정보 저장을 못 했습니다.", Toast.LENGTH_SHORT).show()
                                 }
-                                codefPostProcess()
                             }
 
                             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
 //                    Toast.makeText(this@IdentityCertificationActivity, "서버에 연결할 수 없습니다.", Toast.LENGTH_LONG).show()
 //                    binding.loadingLayout.root.visibility = View.GONE
-                                codefPostProcess()
+                                binding.errorText = call.toString()
+
                             }
                         })
-
-//                    goToNextActivity()
                 } else {
                     binding.companyInfoText1 = "자격 득실 내역이 없습니다.\n"
-                    codefPostProcess()
                 }
             } else {
+                binding.isDoneClicked = false
                 if (resultMap["code"] == "CF-03002") {
-                    binding.isDoneClicked = false
                     binding.errorText = "인증이 완료되지 않았습니다."
-                } else if (resultMap["code"] == "CF-12102") {
-                    binding.companyInfoText1 = resultMap["message"].toString()
                 } else {
                     binding.companyInfoText1 = "잠시 후 다시 시도해 주세요.\n" +
                             resultMap["code"].toString() + "\n" +
                             resultMap["message"].toString() + "\n" +
                             resultMap["extraMessage"].toString()
                 }
-                codefPostProcess()
             }
         }
     }
 
     fun onClickNext(view: View) {
+        finishWithResultCode()
+    }
+
+
+    private fun finishWithResultCode() {
+
+        val mIntent = Intent(this@IdentityCertificationActivity, CustomerListActivity::class.java)
+        setResult(1001, mIntent)
+
         finish()
     }
 
-
-    fun codefPostProcess() {
-        resultCount--
-        binding.errorText = resultCount.toString()
-        if(resultCount == 0) {
-            CoroutineScope(Dispatchers.Default).launch {
-                binding.companyInfoText2 = "3초 뒤 창이 닫힙니다."
-                delay(3000)
-
-                val mIntent = Intent(this@IdentityCertificationActivity, CustomerListActivity::class.java)
-                setResult(1001, mIntent)
-
-                finish()
-            }
-        }
-
-    }
     private fun goToNextActivity() {
         resultText = binding.companyInfoText1.toString() + "\n" +
                 binding.companyInfoText2.toString() + "\n\n\n" +
@@ -608,10 +621,27 @@ class IdentityCertificationActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-//            R.id.skipCertification -> {
-//                goToNextActivity()
-//                true
-//            }
+            R.id.reCertification -> {
+                val mIntent = Intent(this@IdentityCertificationActivity, IdentityCertificationActivity::class.java)
+
+                binding.userName = intent.getStringExtra("name")
+
+                binding.birthYear = intent.getStringExtra("birthYear")
+                binding.birthMonth = intent.getStringExtra("birthMonth")
+                binding.birthDay = intent.getStringExtra("birthDay")
+
+                binding.phoneNumber = intent.getStringExtra("phone")
+
+                mIntent.putExtra("name", customer.name)
+                mIntent.putExtra("phone", customer.phone)
+                mIntent.putExtra("birthYear", customer.birth.substring(0,4))
+                mIntent.putExtra("birthMonth", customer.birth.substring(4,6))
+                mIntent.putExtra("birthDay", customer.birth.substring(6))
+                startActivity(mIntent)
+                finish()
+
+                true
+            }
             R.id.cancelCertification -> {
                 finish()
                 true

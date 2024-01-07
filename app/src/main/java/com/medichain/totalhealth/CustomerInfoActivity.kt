@@ -78,7 +78,6 @@ class CustomerInfoActivity : AppCompatActivity() {
             R.id.reCertification -> {
 
                 val mIntent = Intent(this@CustomerInfoActivity, IdentityCertificationActivity::class.java)
-                mIntent.putExtra("reCertification", true)
                 mIntent.putExtra("name", customer.name)
                 mIntent.putExtra("phone", customer.phone)
                 mIntent.putExtra("birthYear", customer.birth.substring(0,4))
