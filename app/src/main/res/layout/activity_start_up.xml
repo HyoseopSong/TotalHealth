@@ -9,10 +9,16 @@
             name="is_splash"
             type="Boolean" />
         <variable
+            name="LoginEnabled"
+            type="Boolean" />
+        <variable
             name="LoginID"
             type="String" />
         <variable
             name="LoginPW"
+            type="String" />
+        <variable
+            name="LoginStatus"
             type="String" />
 
         <import type="android.view.View"/>
@@ -192,11 +198,12 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="로그인"
+            android:text="@={LoginStatus}"
             android:onClick="@{activity::onClickLogIn}"
             android:textSize="20dp"
             android:paddingVertical="10dp"
             android:textColor="@color/black"
+            android:enabled="@{LoginEnabled}"
             android:visibility="@{is_splash ? View.GONE : View.VISIBLE, default=visible}"
             android:theme="@style/Button.KakaoLogin"
             android:layout_marginHorizontal="20dp"

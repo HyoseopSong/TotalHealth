@@ -4,13 +4,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -20,11 +18,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.medichain.totalhealth.databinding.ActivityStartUpBinding
 import com.medichain.totalhealth.network.APIInterface
 import com.medichain.totalhealth.network.ServerAPI
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,6 +33,8 @@ class StartUpActivity : AppCompatActivity() {
 //        setContentView(R.layout.activity_main)
         binding.isSplash = false
         binding.activity = this@StartUpActivity
+        binding.loginEnabled = true
+        binding.loginStatus = "로그인"
 
         permissionCheck()
 
@@ -57,7 +54,10 @@ class StartUpActivity : AppCompatActivity() {
         startActivity(mIntent)
         finish()
     }
+    var loginCount = 0
     fun onClickLogIn(view: View) {
+        binding.loginEnabled = false
+        binding.loginStatus = if(loginCount == 0)"서버 응답 대기 중..." else "로그인 재시도 $loginCount"
         ServerAPI().getAPI(this@StartUpActivity).create(APIInterface::class.java)
             .LogIn(binding.loginID + "," + binding.loginPW)
             .enqueue(object :
@@ -66,20 +66,35 @@ class StartUpActivity : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    val responseBody = response.body()!!.string()
-                    if(responseBody == "T") {
-                        val mIntent = Intent(this@StartUpActivity, CustomerListActivity::class.java)
+                    if(response.isSuccessful) {
+                        val responseBody = response.body()!!.string()
+                        if(responseBody == "T") {
+                            val mIntent = Intent(this@StartUpActivity, CustomerListActivity::class.java)
 
-                        getSharedPreferences(packageName, MODE_PRIVATE).edit()
-                            .putString("LoginID", binding.loginID)
-                            .apply()
+                            getSharedPreferences(packageName, MODE_PRIVATE).edit()
+                                .putString("LoginID", binding.loginID)
+                                .apply()
 
-                        startActivity(mIntent)
-                        finish()
+                            startActivity(mIntent)
+                            finish()
+                        } else {
+                            Toast.makeText(this@StartUpActivity, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+                        }
                     } else {
-                        Toast.makeText(this@StartUpActivity, "로그인 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+                        val jObjError = JSONObject(response.errorBody()!!.string())
+                        val errorDetail = jObjError["detail"].toString()
+                        if(errorDetail.startsWith("ORA-12570")) {
+                            Toast.makeText(this@StartUpActivity, errorDetail, Toast.LENGTH_SHORT).show()
+                            loginCount++
+                            onClickLogIn(view)
+                        } else {
+                            binding.loginStatus = errorDetail
+                            binding.loginEnabled = true
+                        }
 
+//                        {"type":"OracleException","title":"An unexpected error occurred","status":500,"detail":"ORA-12570: Network Session: Unexpected packet read error","instance":"POST /Error"}
                     }
+
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
